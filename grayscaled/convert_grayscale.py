@@ -17,6 +17,6 @@ for row in range(height):
         grayscaled[row, collum] = grayscale_value
 
 cv2.imshow('after', grayscaled)
-cv2.imwrite('grayscaled.jpg', grayscaled)
+# cv2.imwrite('grayscaled.jpg', grayscaled)
 cv2.waitKey(0)
 cv2.destroyAllWindows
