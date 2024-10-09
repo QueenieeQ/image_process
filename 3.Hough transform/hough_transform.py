@@ -62,13 +62,42 @@ votes = numpy.zeros((2* rho_max, theta_max),dtype=numpy.int32)
 # calculate vote in hough transform accumulator
 for h in range(height):
     for w in range(width):
-        if binary_output[y,x ] > 0:
+        if binary_output[h,w ] > 0:
             for theta in range(0, theta_max):
                 theta_radian = numpy.deg2rad(theta)
                 rho = int(w * numpy.cos(theta_radian)+ h * numpy.sin(theta_radian))
                 rho_index = rho + rho_max
                 votes[rho_index, theta] += 1
 print(votes)
+# apply threshold to accumulator and detect line
+hough_threshold = 200 
+lines = numpy.argwhere(votes > hough_threshold)
+#draw detected line on images
+for rho_index, theta_index in lines:
+    rho = rho_index - rho_max 
+    # convert rho index bach to to rho
+    theta = numpy.deg2rad(theta_index)
+    #convert polar coordinate (rho,theta) to cartesian coordinates to drawing
+    x0 = (numpy.cos(theta)) * rho
+    y0 = (numpy.sin(theta)) * rho
+# calculate 2 point on the line to draw
+    x1 = int(x0 + 1000 * (-1*( numpy.sin(theta))))
+    y1 = int( y0 +1000 * (1 *( numpy.cos(theta))))
+    x2 = int( x0 - 1000 * (-1*( numpy.sin(theta))))
+    y2 = int( y0 -1000 * (1 *( numpy.cos(theta))))
+    # now draw the line on image using opencv line
+    # Or you can draw the line by yourself use bresenham line algorithm
+    cv2.line(pic, (x1, y1), (x2, y2), (0,0,255),2 )
+
+# show result
+cv2.imshow('3. Hough Transform lines', pic)
+cv2.waitKey(0)
+cv2.destroyAllWindows
+           
+
+
+    
+
 
 
 
