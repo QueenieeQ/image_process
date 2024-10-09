@@ -1,14 +1,13 @@
 import cv2
 import numpy
 
-# grayscale_image = cv2.imread('../Road_image.jpg', cv2.IMREAD_GRAYSCALE)
 # open image using opencv 
 # step 1
 pic = cv2.imread('../Road_image.jpg')
-cv2.imshow('before', pic)
+cv2.imshow('0. input image', pic)
 # get image dimensions and color channel
 height, width, channels = pic.shape
-#declear a array variable for grayscale image
+# declare an empty array variable for grayscale image
 grayscale_image = numpy.zeros((height,width), dtype = numpy.uint8)
 
 # interate over every pixel from top to bottom, left to right and apply luminance formula
@@ -20,7 +19,7 @@ for row in range(height):
         grayscale_value = int(0.299 * r + 0.587 * g + 0.114 * b)
         # save the grayscale value to new image
         grayscale_image[row, collum] = grayscale_value
-cv2.imshow('grayscaled', grayscale_image)
+cv2.imshow('1. grayscale image', grayscale_image)
 # step 2
 # get grayscaled image size
 height, width = grayscale_image.shape
@@ -52,8 +51,8 @@ sobel_threshold = int(input("Enter threshold value(50-100):"))
 # apply a threshold value to create binary edge iamge
 _,binary_ouput = cv2.threshold(sobel_magnitude_normalized, sobel_threshold, 255, cv2.THRESH_BINARY)
 # show result
-cv2.imwrite('../sobel_edge_detection.jpg', binary_ouput)
-cv2.imshow('title', binary_ouput)
+cv2.imwrite(f'../sobel_edge_detection_{sobel_threshold}.jpg', binary_ouput)
+cv2.imshow('2. sobel filter', binary_ouput)
 cv2.waitKey(0)
 cv2.destroyAllWindows
 
