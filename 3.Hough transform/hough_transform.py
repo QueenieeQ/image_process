@@ -68,7 +68,7 @@ for h in range(height):
                 rho = int(w * numpy.cos(theta_radian)+ h * numpy.sin(theta_radian))
                 rho_index = rho + rho_max
                 votes[rho_index, theta] += 1
-print(votes)
+# print(votes)
 # apply threshold to accumulator and detect line
 hough_threshold = 200 
 lines = numpy.argwhere(votes > hough_threshold)
@@ -91,6 +91,7 @@ for rho_index, theta_index in lines:
 
 # show result
 cv2.imshow('3. Hough Transform lines', pic)
+cv2.imwrite(f'../images/hough_transform_threshold_level_{sobel_threshold}.jpg',pic)
 cv2.waitKey(0)
 cv2.destroyAllWindows
            
