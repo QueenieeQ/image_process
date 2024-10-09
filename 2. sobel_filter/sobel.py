@@ -52,6 +52,7 @@ sobel_threshold = int(input("Enter threshold value(50-100):"))
 # apply a threshold value to create binary edge iamge
 _,binary_ouput = cv2.threshold(sobel_magnitude_normalized, sobel_threshold, 255, cv2.THRESH_BINARY)
 # show result
+cv2.imwrite('../sobel_edge_detection.jpg', binary_ouput)
 cv2.imshow('title', binary_ouput)
 cv2.waitKey(0)
 cv2.destroyAllWindows
