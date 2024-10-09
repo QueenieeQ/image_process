@@ -71,12 +71,14 @@ for h in range(height):
 # print(votes)
 # apply threshold to accumulator and detect line
 hough_threshold = 200 
+lines_detected = []
 lines = numpy.argwhere(votes > hough_threshold)
 #draw detected line on images
 for rho_index, theta_index in lines:
     rho = rho_index - rho_max 
     # convert rho index bach to to rho
     theta = numpy.deg2rad(theta_index)
+    lines_detected.append((rho,theta))
     #convert polar coordinate (rho,theta) to cartesian coordinates to drawing
     x0 = (numpy.cos(theta)) * rho
     y0 = (numpy.sin(theta)) * rho
@@ -88,10 +90,39 @@ for rho_index, theta_index in lines:
     # now draw the line on image using opencv line
     # Or you can draw the line by yourself use bresenham line algorithm
     cv2.line(pic, (x1, y1), (x2, y2), (0,0,255),2 )
+cv2.imshow('3. Hough Transform lines', pic)
+
+# find intersections between the lines
+intersecs = []
+for i in range(len(lines_detected)):
+    for j in range(i+1, len(lines_detected)):
+        rho1, theta1 = lines_detected[i]
+        rho2, theta2 = lines_detected[j]
+        # check agngle diff is bigger than 30 degree
+        angle_different = abs(numpy.rad2deg(theta1) - numpy.rad2deg(theta2))
+        if angle_different > 30:
+            line1 = numpy.array([[numpy.cos(theta1),numpy.sin(theta1)],
+                                [numpy.cos(theta2), numpy.sin(theta2)]])
+            line2 = numpy.array([rho1, rho2])
+            # intersecPoint = numpy.linalg.solve(line1,line2)
+            # tuple(map(int, intersecs))
+            try:
+                # Solve for intersection point
+                intersecPoint = numpy.linalg.solve(line1, line2)
+                intersecPoint = tuple(map(int, intersecPoint))  # Convert to integer tuple
+                # Check if intersection point is within image dimensions
+                if 0 <= intersecPoint[0] < width and 0 <= intersecPoint[1] < height:
+                    intersecs.append(intersecPoint)  # Append to intersecs list
+            except numpy.linalg.LinAlgError:
+                # Lines are parallel, no intersection
+                continue
+
+for point in intersecs:
+    cv2.circle(pic, point, 5 , (255,0,0),-1)
 
 # show result
-cv2.imshow('3. Hough Transform lines', pic)
-cv2.imwrite(f'../images/hough_transform_threshold_level_{sobel_threshold}.jpg',pic)
+cv2.imshow('4. Hough Transform lines and tntersections', pic)
+cv2.imwrite(f'../images/hough_transform_intersec_threshold_level_{sobel_threshold}.jpg',pic)
 cv2.waitKey(0)
 cv2.destroyAllWindows
            
