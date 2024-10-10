@@ -118,7 +118,7 @@ for i in range(len(lines_detected)):
                 continue
 
 for point in intersecs:
-    cv2.circle(pic, point, 5 , (255,0,0),-1)
+    cv2.circle(pic, point, 5 , (0,255,0),-1)
 
 # show result of step 4
 cv2.imshow('4. Hough Transform lines and tntersections', pic)
@@ -133,11 +133,11 @@ average_y = sum_y / len(intersecs)
 vanishing_point = (average_x, average_y)
 
 # cv2.circle( pic, vanishing_point, 10, (0,0,255), -1 )
-cv2.circle(pic, (int(vanishing_point[0]), int(vanishing_point[1])), 15, (255, 0, 0), 1)
+cv2.circle(pic, (int(vanishing_point[0]), int(vanishing_point[1])), 5, (255, 0, 0), -1)
 
 print(f" coorditantes: {vanishing_point}")
-cv2.imshow('Vanishing Point', pic)
-cv2.imwrite('../images/5. Vanishing_point.jpg', pic)
+cv2.imshow('5. Vanishing Point', pic)
+cv2.imwrite(f'../images/5. Vanishing_point_threshold_{sobel_threshold}.jpg', pic)
 cv2.waitKey(0)
 cv2.destroyAllWindows
            
