@@ -123,6 +123,21 @@ for point in intersecs:
 # show result of step 4
 cv2.imshow('4. Hough Transform lines and tntersections', pic)
 # cv2.imwrite(f'../images/hough_transform_intersec_threshold_level_{sobel_threshold}.jpg',pic)
+# step 5
+# sum all intersection point and compute average position
+sum_x = sum(point[0] for point in intersecs)
+sum_y = sum(point[1] for point in intersecs)
+
+average_x= sum_x /(len(intersecs))
+average_y = sum_y / len(intersecs)
+vanishing_point = (average_x, average_y)
+
+# cv2.circle( pic, vanishing_point, 10, (0,0,255), -1 )
+cv2.circle(pic, (int(vanishing_point[0]), int(vanishing_point[1])), 15, (255, 0, 0), 1)
+
+print(f" coorditantes: {vanishing_point}")
+cv2.imshow('Vanishing Point', pic)
+cv2.imwrite('../images/5. Vanishing_point.jpg', pic)
 cv2.waitKey(0)
 cv2.destroyAllWindows
            
