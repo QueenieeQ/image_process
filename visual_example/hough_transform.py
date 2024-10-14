@@ -14,13 +14,15 @@ img = cv2.imread('../images/Road_image.jpg')
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
 # Apply edge detection method on the image
-edges = cv2.Canny(gray, 50, 150, apertureSize=3)
+edges = cv2.Canny(gray, 100, 200, apertureSize=3)
+# edges = cv2.can
 
 # This returns an array of r and theta values
 lines = cv2.HoughLines(edges, 1, np.pi/180, 200)
 
 # The below for loop runs till r and theta values
 # are in the range of the 2d array
+
 for r_theta in lines:
     arr = np.array(r_theta[0], dtype=np.float64)
     r, theta = arr

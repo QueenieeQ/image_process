@@ -4,7 +4,7 @@ import math
 
 # open image using opencv 
 # step 1
-pic = cv2.imread('../images/Road_image.jpg')
+pic = cv2.imread('/Users/queenieeq/Python/image_process/images/Road_image.jpg')
 cv2.imshow('0. input image', pic)
 # get image dimensions and color channel
 height, width, channels = pic.shape
@@ -15,11 +15,12 @@ grayscale_image = numpy.zeros((height,width), dtype = numpy.uint8)
 for row in range(height):
     for collum in range(width):
         # take r,g,b value
-        r,g,b = pic[row,collum]
+        r,g,b = pic[row,collum] 
         # calculate grayscale luminance
         grayscale_value = int(0.299 * r + 0.587 * g + 0.114 * b)
         # save the grayscale value to new image
         grayscale_image[row, collum] = grayscale_value
+print(grayscale_image)
 cv2.imshow('1. grayscale image', grayscale_image)
 # step 2
 # get grayscaled image size
@@ -50,7 +51,7 @@ sobel_magnitude_normalized = numpy.uint8(255 * sobel_magnitude / numpy.max(sobel
 sobel_threshold = int(input("Enter threshold value(50-100):"))
 # apply a threshold value to create binary edge iamge
 _,binary_output = cv2.threshold(sobel_magnitude_normalized, sobel_threshold, 255, cv2.THRESH_BINARY)
-
+# cv2.imshow('2. sobel_x_axis:', sobel_y)
 cv2.imshow('2. sobel_filter',binary_output)
 # Step 3 
 # Hough Transform implementation
@@ -88,7 +89,7 @@ for rho_index, theta_index in lines:
     y2 = int( y0 -1000 * (1 *( numpy.cos(theta))))
     # now draw the line on image using opencv line
     # Or you can draw the line by yourself use bresenham line algorithm
-    cv2.line(pic, (x1, y1), (x2, y2), (0,0,255),2 )
+    cv2.line(pic, (x1, y1), (x2, y2), (0,0,255),1 )
 cv2.imshow('3. Hough Transform lines', pic)
 
 # find intersections between the lines
@@ -109,13 +110,15 @@ for i in range(len(lines_detected)):
                 # Solve for intersection point
                 intersecPoint = numpy.linalg.solve(line1, line2)
                 intersecPoint = tuple(map(int, intersecPoint))  # Convert to integer tuple
+                print('4. intersecPoint Location',intersecPoint)
                 # Check if intersection point is within image dimensions
                 if 0 <= intersecPoint[0] < width and 0 <= intersecPoint[1] < height:
                     intersecs.append(intersecPoint)  # Append to intersecs list
             except numpy.linalg.LinAlgError:
                 # Lines are parallel, no intersection
                 continue
-
+print('4. intersecPoint Location',intersecPoint)
+print('Length of intersecs:',len(intersecs))
 for point in intersecs:
     cv2.circle(pic, point, 5 , (0,255,0),-1)
 
@@ -133,8 +136,8 @@ vanishing_point = (average_x, average_y)
 
 # cv2.circle( pic, vanishing_point, 10, (0,0,255), -1 )
 cv2.circle(pic, (int(vanishing_point[0]), int(vanishing_point[1])), 5, (255, 0, 0), -1)
-
-print(f" coorditantes: {vanishing_point}")
+# cv2.circl
+print(f"5. coorditantes: {vanishing_point}")
 cv2.imshow('5. Vanishing Point', pic)
 cv2.imwrite(f'../images/5. Vanishing_point_threshold_{sobel_threshold}.jpg', pic)
 cv2.waitKey(0)

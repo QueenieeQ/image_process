@@ -3,7 +3,7 @@ import numpy
 
 # open image using opencv 
 # step 1
-pic = cv2.imread('../Road_image.jpg')
+pic = cv2.imread('../images/Road_image.jpg')
 cv2.imshow('0. input image', pic)
 # get image dimensions and color channel
 height, width, channels = pic.shape
@@ -51,7 +51,7 @@ sobel_threshold = int(input("Enter threshold value(50-100):"))
 # apply a threshold value to create binary edge iamge
 _,binary_ouput = cv2.threshold(sobel_magnitude_normalized, sobel_threshold, 255, cv2.THRESH_BINARY)
 # show result
-cv2.imwrite(f'../sobel_edge_detection_{sobel_threshold}.jpg', binary_ouput)
+cv2.imwrite(f'../images/sobel_edge_detection_threshold_{sobel_threshold}.jpg', binary_ouput)
 cv2.imshow('2. sobel filter', binary_ouput)
 cv2.waitKey(0)
 cv2.destroyAllWindows
